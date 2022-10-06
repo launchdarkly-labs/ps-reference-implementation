@@ -1,38 +1,3 @@
-variable "project" {
-  type = object({
-    name = string
-    key  = string
-  })
-  description = "LaunchDarkly Project name and key"
-  required    = true
-}
-
-variable "environments" {
-  type = map(object({
-    name = string
-    key  = string
-  }))
-  description = "List of LaunchDarkly environments that per-environment roles will be created for"
-  required    = true
-  default = {
-    "test" : {
-      name = "Test"
-      key  = "test"
-    }
-    "production" : {
-      name = "Production"
-      key  = "production"
-    },
-  }
-}
-
-
-
-locals {
-  production_specifiers = [for env in var.production_environments : "proj/${var.project.key}/${env}"]
-}
-
-
 /// Read only access to a subset of projects
 /// May create approval requests.
 /// Rationale: Empower any team to request changes to the application. May be scoped with a tag. Think requesting user impersonation
@@ -46,15 +11,10 @@ launchdarkly_custom_role "project_member" {
     resources = ["proj/${var.project.key}"]
     actions   = ["viewProject", "createApprovalRequest"]
   }
-  policy_statements {
-    effect    = "deny"
-    resources = ["proj/${var.project.key}:env/*"]
-    actions   = ["viewSdkKey"]
-  }
 }
 
 launchdarkly_custom_role "sdk-key" {
-  for_each = var.environments
+  for_each         = var.environments
   key              = "${var.project.key}-sdk-key-${each.key}"
   name             = "${var.project.name} SDK Key: ${each.value.name}"
   description      = "Can view the read-only server-side SDK key in preproduction environments"
@@ -134,7 +94,7 @@ launchdarkly_custom_role "segment-manager" {
 
 
 launchdarkly_custom_role "apply-changes" {
-  for_each =  var.environments
+  for_each         = var.environments
   key              = "${var.project.key}-apply-changes-${each.key}"
   name             = "${var.project.Name} Apply Changes: ${each.value.name}"
   description      = "Can apply approved changes in production"
@@ -193,7 +153,7 @@ launchdarkly_custom_role "sdk-manager" {
 
 
 launchdarkly_custom_role "trigger-manager" {
-  for_each = var.environments
+  for_each         = var.environments
   key              = "${var.project.key}-trigger-manager-${each.key}"
   name             = "${var.project.name} Trigger Manager - ${each.value.name}"
   description      = "Delegates authority to toggle a flag on/off via unguessable URL endpoint"
@@ -205,6 +165,3 @@ launchdarkly_custom_role "trigger-manager" {
     actions   = ["updateTriggers"]
   }
 }
-
-
-
