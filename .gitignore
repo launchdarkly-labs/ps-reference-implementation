@@ -1,5 +1,6 @@
-// gitignore terraform\
+// gitignore terraform
 *.tfstate
 *.tfstate.backup
 .terraform/*
-.tfvars
+terraform.tfvars
+custom.tf

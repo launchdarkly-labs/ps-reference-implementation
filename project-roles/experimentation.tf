@@ -1,7 +1,7 @@
 
-launchdarkly_custom_role "experiment-manager" {
-  key              = "${var.project.key}-exp-manager"
-  name             = "${var.project.key} Experiment Manager"
+resource launchdarkly_custom_role "experiment-manager" {
+  key              = "exp-manager-${var.project.key}"
+  name             = "Experiment Manager: ${var.project.key}"
   description      = "Can create and manage experiments and metrics in all environments"
   base_permissions = "no_access"
 
@@ -20,16 +20,16 @@ launchdarkly_custom_role "experiment-manager" {
 }
 
 
-launchdarkly_custom_role "experiment-maintainer" {
+resource launchdarkly_custom_role "experiment-maintainer" {
   for_each         = var.environments
-  key              = "${var.project.key}-exp-maintainer-${each.key}"
-  name             = "${var.project.name} Experiment Maintainer: ${each.value.name}"
+  key              = "exp-maintainer-${var.project.key}-${each.key}"
+  name             = "Experiment Maintainer: ${var.project.name} - ${each.value.name}"
   description      = "Can create, start, stop, and delete experiments in a single environment"
   base_permissions = "no_access"
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.key}:env/${each.value.key}:experiment/*"]
+    resources = ["proj/${var.project.key}:env/${each.key}:experiment/*"]
     actions   = ["createExperimentIteration", "deleteExperimentIteration", "deleteExperimentResults", "updateExperimentIteration", "updateExperimentIterationActive"]
 
   }

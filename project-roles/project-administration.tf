@@ -1,7 +1,7 @@
 
-launchdarkly_custom_role "workspace-admin" {
-  key              =  "${var.project.key}-admin"
-  name             = "${var.project.name} Admin"
+resource launchdarkly_custom_role "workspace-admin" {
+  key              =  "admin-${var.project.key}"
+  name             = "Project Admin - ${var.project.name}"
   description      = "All actions relating to projects/environments including potentially destructive ones such as delete project"
   base_permissions = "no_access"
 
@@ -15,7 +15,7 @@ launchdarkly_custom_role "workspace-admin" {
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.name}:env/*"]
+    resources = ["proj/${var.project.key}:env/*"]
     actions   = ["createEnvironment", "deleteEnvironment", "updateApiKey", "updateApprovalSettings", "updateColor", "updateConfirmChanges", "updateDefaultTrackEvents", "updateMobileKey", "updateName", "updateRequireComments", "updateSecureMode", "updateTags", "updateTtl"]
 
   }
@@ -23,7 +23,7 @@ launchdarkly_custom_role "workspace-admin" {
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.name}:env/*:flag/*"]
+    resources = ["proj/${var.project.key}:env/*:flag/*"]
     actions   = ["deleteFlag", "updateFlagSalt"]
 
   }
@@ -31,7 +31,7 @@ launchdarkly_custom_role "workspace-admin" {
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.name}:env/*:user/*"]
+    resources = ["proj/${var.project.key}:env/*:user/*"]
     actions   = ["deleteUser"]
 
   }
@@ -39,7 +39,7 @@ launchdarkly_custom_role "workspace-admin" {
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.name}"]
+    resources = ["proj/${var.project.key}"]
     actions   = ["createProject", "deleteProject", "updateDefaultClientSideAvailability", "updateProjectName", "updateTags"]
 
   }
@@ -48,15 +48,15 @@ launchdarkly_custom_role "workspace-admin" {
 }
 
 
-launchdarkly_custom_role "workspace-maintainer" {
-  key              = "${var.project.name}-maintainer"
-  name             = ": ${var.project.name}"
+resource launchdarkly_custom_role "workspace-maintainer" {
+  key              = "maintainer-${var.project.key}"
+  name             = "Project Maintainer - ${var.project.name}"
   description      = "Allow any project/environment actions that do not impact the evaluation of existing flags. Can’t delete destinations"
   base_permissions = "no_access"
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.name}:env/*:destination/*"]
+    resources = ["proj/${var.project.key}:env/*:destination/*"]
     actions   = ["createDestination", "updateConfiguration", "updateName", "updateOn"]
 
   }
@@ -64,7 +64,7 @@ launchdarkly_custom_role "workspace-maintainer" {
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.name}:env/*"]
+    resources = ["proj/${var.project.key}:env/*"]
     actions   = ["createEnvironment", "updateColor", "updateDefaultTrackEvents", "updateName", "updateRequireComments", "updateTags", "updateTtl"]
 
   }
@@ -72,7 +72,7 @@ launchdarkly_custom_role "workspace-maintainer" {
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.name}:env/*:user/*"]
+    resources = ["proj/${var.project.key}:env/*:user/*"]
     actions   = ["deleteUser"]
 
   }
@@ -80,7 +80,7 @@ launchdarkly_custom_role "workspace-maintainer" {
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${var.project.name}"]
+    resources = ["proj/${var.project.key}"]
     actions   = ["createProject", "updateDefaultClientSideAvailability", "updateIncludeInSnippetByDefault", "updateProjectName", "updateTags"]
 
   }

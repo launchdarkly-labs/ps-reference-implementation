@@ -1,38 +1,23 @@
 terraform {
   required_providers {
     launchdarkly = {
-      source = "launchdarkly/launchdarkly"
+      source  = "launchdarkly/launchdarkly"
       version = "~> 2.0"
 
     }
-    random = {
-      source = "hashicorp/random"
-      version = "3.1.0"
-    }
-     time = {
-      source = "hashicorp/time"
-      version = "0.7.2"
   }
-  }
- 
 
-  required_version = "~> 0.14.0"
+
+  required_version = "~> 1.1.6"
 }
 
-variable "additional_tags" {
-  type = set(string)
-  default = []
+# Configure the LaunchDarkly provider
+provider "launchdarkly" {
+  access_token = var.launchdarkly_access_token
 }
 
-variable "project_name" {
-    type = string
-    default = "Terminal Demo"
+variable "launchdarkly_access_token" {
+  type = string 
+  sensitive = true
+  description = "LaunchDarkly access token"
 }
-
-variable "project_key" {
-  type = string
-  default = "terminal-demo"
-}
-
-
-
