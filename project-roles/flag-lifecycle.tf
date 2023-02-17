@@ -27,9 +27,6 @@ resource launchdarkly_custom_role "sdk-key" {
   }
 }
 
-
-
-
 resource launchdarkly_custom_role "flag-manager" {
   key              = "flag-manager-${var.project.key}"
   name             = "Flag Manager - ${var.project.name}"
