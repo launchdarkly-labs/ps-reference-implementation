@@ -32,35 +32,29 @@ module "global-project-roles" {
   // project.key will be used in the generated role keys
   // for example: flag-manager-global
   project = {
-    key  = "global"
+    key  = "*"
     name = "All projects"
   }
-  // you can use project_specifier to create projet roles
-  // that match wildcards and tags. it will be used to generate specifiers 
-  // for example: proj/* or proj/default
-  // defaults to project.key
-  project_specifier = "*"
+  // if not specified, project.key will be used
+  role_key = "global"
 
   environments = {
     "test" = {
+      key = "test"
       name = "Test"
     },
     "production" = {
+      key = "production"
       name = "Production"
     }
     "all" = {
+       key = "*"
        name = "All environments"
     }
     "preproduction" = {
+      key = "*"
       name = "Preproduction"
-    },
-
-
-  }
-  // works like project_specifer but for environments
-  environment_specifiers = {
-    "all" = "*"
-    "preproduction" = "*"
+    }
   }
   // allows you insert deny statements into roles generated environments
   // value should be a list of keys from var.environments

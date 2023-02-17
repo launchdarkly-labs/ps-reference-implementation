@@ -6,32 +6,31 @@ variable "project" {
     description = "LaunchDarkly project. The key will be used to generate role keys. If you are using wildcards, use the project_specifier variable"
 }
 
-variable "role_key" {
+variable "project_specifier" {
     type = string
-    description = "Value appended to generated role keys. If null, project.key will be used"
+    description = "Value used to select the project. If null, the project key will be used"
     default = null
 }
 
 variable "environments" {
     type = map(object({
         name = string
-        key = string
     }))
 
   default = {
-    "all" = {
-      key = "*"
-      name = "All environments"
-    }
     "test" = {
-      key = "test"
       name = "Test"
     }
     "production" = {
-      key = "productionf"
       name = "Production"
     }
   }
+}
+
+variable environment_specifiers {
+    type = map(string)
+    description = "Map of environment keys to environment specifiers. Defaults to the environment key"
+    default = {}
 }
 
 variable "environment_excludes" {
@@ -43,15 +42,15 @@ variable "environment_excludes" {
 locals {
     
     project = {
-        key = var.role_key != null ? var.role_key : var.project.key
+        key = var.project.key
         name = var.project.name
-        specifier = var.project.key
+        specifier = var.project_specifier == null ?  var.project.key : var.project_specifier
     }
 
     environments = {
         for key,value in var.environments: key => {
             name = value.name
-            specifier = value.key != null ? value.key : key
+            specifier = try(var.environment_specifiers[key], key)
         }
     }
     denied_environments = {
