@@ -1,3 +1,16 @@
+output "environment-roles" {
+  description = "Map of environment keys to a map of role keys to role values"
+  value = {
+    for env_key, env in local.environments: env_key => {
+        "sdk-key" = launchdarkly_custom_role.sdk-key[env_key],
+        "release-manager" = launchdarkly_custom_role.release-manager[env_key],
+        "approver" = launchdarkly_custom_role.approver[env_key],
+        "segment-manager" = launchdarkly_custom_role.segment-manager[env_key],
+        "apply-changes" = launchdarkly_custom_role.apply-changes[env_key],
+        "trigger-manager" = launchdarkly_custom_role.trigger-manager[env_key]
+    }
+  }
+}
 resource "launchdarkly_custom_role" "sdk-key" {
   for_each         = local.environments
   key              = "sdk-${local.project.key}-${each.key}"

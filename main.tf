@@ -23,21 +23,13 @@ variable "launchdarkly_access_token" {
 }
 
 
-/* Example: Create per-project roles using the project-roles module
-
-*/
-
-module "global-project-roles" {
+/* Example: Create per-project roles using the project-roles module */
+module "default-project-roles" {
   source = "./roles/flag-lifecycle"
-  // project.key will be used in the generated role keys
-  // for example: flag-manager-global
   project = {
-    key  = "*"
-    name = "All projects"
+    key  = "default"
+    name = "Default project"
   }
-  // if not specified, project.key will be used
-  role_key = "global"
-
   environments = {
     "test" = {
       key = "test"
@@ -47,21 +39,56 @@ module "global-project-roles" {
       key = "production"
       name = "Production"
     }
-    "all" = {
-       key = "*"
-       name = "All environments"
-    }
-    "preproduction" = {
-      key = "*"
-      name = "Preproduction"
-    }
-  }
-  // allows you insert deny statements into roles generated environments
-  // value should be a list of keys from var.environments
-  environment_excludes = {
-    "preproduction" = ["production"]
   }
 }
 
+/* Example: Create roles for projects matching a prefix */
+module "sandbox-prefix-project-roles" {
+  source = "./roles/flag-lifecycle"
+  project = {
+    key  = "sandbox-*"
+    name = "Sandbox projects"
+  }
+  // `role_key` is appended to generated role keys
+  // we need to set it since `sandbox-*` is not a valid role key
+  // example roles: flag-manager-sandbox, archiver-sandbox, etc
+  role_key = "sandbox"
+  environments = {
+    "test" = {
+      key = "test"
+      name = "Test"
+    },
+    "production" = {
+      key = "production"
+      name = "Production"
+    }
+  }
+}
 
+/* Example: Create roles for preproduction/production using wildcards and denies */
+module "preproduction-production-roles" {
+  source = "./roles/flag-lifecycle"
+  project = {
+    key  = "default"
+    name = "Default project"
+  }
+
+  environments = {
+    // the map key is used to generate role keys
+    // for example: flag-maintainer-default-preproduction
+    "preproduction" = {
+      // the key defines the specifier
+      key = "*"
+      name = "Preproduction"
+    },
+    "production" = {
+      key = "production"
+      name = "Production"
+    }
+  }
+  // map of environments keys (as defined above) to environment kets 
+  environment_excludes = {
+    "preproduction" = [ "production" ]
+  }
+}
 
