@@ -1,13 +1,13 @@
 Overview
 ---
-This repository contains a series of directories containing detailed examples of how to configure the initial custom roles outlined in LaunchDarkly's Platform Readines via the Terraform provider. Click here for the official documentation on the Terraform website. 
+This repository contains a series of directories containing detailed examples of how to configure the initial custom roles outlined in LaunchDarkly's Platform Readines via the Terraform provider. Click [here](https://registry.terraform.io/providers/launchdarkly/launchdarkly/latest/docs) for the official documentation on the Terraform website. 
 
 > ! TAKE NOTE! Running terraform apply on any of these directories with your auth credentials will result in real resources being created that may cost real money. These are meant to be used as examples only and LaunchDarkly is not responsible for any costs incurred via testing.
 
 Setup
 --- 
 Install Terraform
-First and foremost, you need to make sure you have Terraform installed on the machine you will be applying the configurations from and that you meet the requirements listed on the project readme. For instructions on how to install Terraform, see here.
+First and foremost, you need to make sure you have Terraform installed on the machine you will be applying the configurations from and that you meet the requirements listed on the [project readme](https://github.com/hashicorp/terraform-provider-launchdarkly#requirements). For instructions on how to install Terraform, see [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli).
 
 
 ### Configure LD Credentials
@@ -20,7 +20,7 @@ provider "launchdarkly" {
   version = "~>1.0"
 }
 ```
-If you would prefer to define your variables some other way, see Terraform's documentation on input variables for some other ways to do so.
+If you would prefer to define your variables some other way, see [Terraform's documentation on input variables](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-variables) for some other ways to do so.
 
 
 
@@ -28,9 +28,9 @@ Example: custom role
 ---
 
 ### Introduction
-For enterprise customers, LaunchDarkly allows the configuration of custom roles to tailor user permissions. For more on these, see the LaunchDarkly official documentation.
+For enterprise customers, LaunchDarkly allows the configuration of custom roles to tailor user permissions. For more on these, see the [LaunchDarkly official documentation](https://docs.launchdarkly.com/home/members/custom-roles).
 
-This directory provides an example a custom role configuration that denies the user access to flags with the "terraform-managed" tag. For more information on tags in custom roles, see the [LaunchDarkly documentation[(https://docs.launchdarkly.com/home/account-security/custom-roles/tags)].
+This directory provides an example a [custom role configuration](https://docs.launchdarkly.com/home/account-security/custom-roles/configure) that denies the user access to flags with the "terraform-managed" tag. For more information on tags in custom roles, see the [LaunchDarkly documentation](https://docs.launchdarkly.com/home/account-security/custom-roles/tags).
 
 To add the tag to any of your Terraform-managed resources, you will need to ensure
 
