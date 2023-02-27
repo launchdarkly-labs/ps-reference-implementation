@@ -1,12 +1,15 @@
 output "project-roles"{
     description = "Project-level flag lifecycle management roles"
     value = {
-        "view-project" = launchdarkly_custom_role.view-project,
+        "member" = launchdarkly_custom_role.member,
         "sdk-key" = launchdarkly_custom_role.sdk-key,
         "flag-manager" = launchdarkly_custom_role.flag-manager,
         "release-manager" = launchdarkly_custom_role.release-manager,
         "flag-archiver" = launchdarkly_custom_role.flag-archiver,
         "variation-manager" = launchdarkly_custom_role.variation-manager,
+        "approver" = launchdarkly_custom_role.approver,
+        "segment manager" = launchdarkly_custom_role.segment-manager,
+        "apply changes" = launchdarkly_custom_role.apply-changes,
         "sdk-manager" = launchdarkly_custom_role.sdk-manager
 
     }
@@ -15,9 +18,9 @@ output "project-roles"{
 /// Read only access to a subset of projects
 /// May create approval requests.
 /// Rationale: Empower any team to request changes to the application. May be scoped with a tag. Think requesting user impersonation
-resource launchdarkly_custom_role "view-project" {
-  key              = "view-${local.project.key}"
-  name             = "View - ${local.project.name}"
+resource launchdarkly_custom_role "member" {
+  key              = "member-${local.project.key}"
+  name             = "Member - ${local.project.name}"
   description      = "Can view the project and its flags, but cannot make changes."
   base_permissions = "no_access"
   policy_statements {
@@ -64,6 +67,59 @@ resource launchdarkly_custom_role "variation-manager" {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/*:flag/*"]
     actions   = ["updateFlagVariations"]
+  }
+}
+
+resource launchdarkly_custom_role "approver" {
+  key              = "approver-${local.project.key}"
+  name             = "Approver - ${local.project.name}"
+  description      = "Can review, update, and delete approval requests.Can not apply approval requests."
+  base_permissions = "no_access"
+
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}:env/*:flag/*"]
+    actions   = ["deleteApprovalRequest", "reviewApprovalRequest", "updateApprovalRequest"]
+
+  }
+}
+
+resource launchdarkly_custom_role "segment-manager" {
+  key              = "segment-mgr-${local.project.key}"
+  name             = "Segment Manager - ${local.project.name}"
+  description      = "Can create/modify/delete segments in a single environment"
+  base_permissions = "no_access"
+
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}:env/*:segment/*"]
+    actions   = [
+      "createSegment",
+      "deleteSegment",
+      "updateDescription",
+      "updateExcluded",
+      "updateExpiringRules",
+      "updateExpiringTargets",
+      "updateIncluded",
+      "updateName",
+      "updateRules",
+      "updateScheduledChanges",
+      "updateTags"
+    ]
+  }
+}
+
+resource launchdarkly_custom_role "apply-changes" {
+  key              = "apply-changes-${local.project.key}"
+  name             = "Apply Changes - ${local.project.name}"
+  description      = "Can apply approved changes in production"
+  base_permissions = "no_access"
+
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}:env/*:flag/*"]
+    actions   = ["applyApprovalRequest"]
+
   }
 }
 
