@@ -84,3 +84,44 @@ You should then be able to confirm the creation of your custom role by navigatin
 
 To view the policy details, click on the role to expand:
 <img width="977" alt="Screenshot 2023-02-23 at 12 49 42 PM" src="https://user-images.githubusercontent.com/114673814/221029823-4e860fa0-a573-4646-b842-94c9ee000b75.png">
+
+How to Use
+---
+
+### Overview
+When creating intial custom roles for your LaunchDarkly instance, we have seen two approaches work well across organizations of various size and scale. 
+1. Per Environment
+     This approach will create the intial custom roles within each environment. If you have 3 LaunchDarkly environments (Dev, QA, and Production) it would create the Release Manager role as Release Manager Dev, Release Manager QA, and Release Manager Production.
+
+     Creating the intial custom roles on a per environment basis would be beneficial if you wish to give your organization fine grain access control over each environment.
+
+2. Preproduction vs Production
+     This approach will create a set of the intial custom roles in your LaunchDarkly production environment and another set of initial custom roles in all other environments (aka Preproduction). If you have 3 LaunchDarkly environments (Dev, QA, and Production) it would create the Release Manager role as Release Manager Production (covering the production environemnt) and Release Manager Preproduction (covering Dev & QA environments).
+
+     Creating the intial custom roles on a production and preproduction basis allows your organization to have more tightly controlled production environment compared to your other environemnts.
+
+However, each organization is different and has their own set of use cases and security requirements.  Please take this into consideration before deciding on an approach.
+
+*If you took part in a paid Platform Readiness engagement, a decision on which approach to take should have been made during the engagement in consultation with the attendees.*
+
+### Implementing Per Environment Initial Custom Roles
+In order to implement the per environment approach for the intial custom roles, you will need to make the following modifications to the `main.tf` file.
+1. Clone this repo or download the zip locally
+2. Open `main.tf`
+3. Remove or comment out lines 69-93 (`module "preproduction-production-roles"`)
+4. Under `module "default-project-roles"`
+  * Update `project` key and name to reflect your project key and project name
+  * Update  `environment` to reflect your environment keys and environment names. You may need to make additional entries to account for all your environments.
+5. Save
+6. Follow the steps listed above under [Run](https://github.com/launchdarkly-labs/ps-reference-implementation#run)
+
+### Implementing Production vs Preproduction Initial Custom Roles
+In order to implement the Production vs. Preproduction approach for the intial custom roles, you will need to make the following modifications to the `main.tf` file.
+1. Clone this repo or download the zip locally
+2. Open `main.tf`
+3. Remove or comment out lines 27-43 (`module "default-project-roles"`)
+4. Under `module "preproduction-production-roles"`
+  * Update `project` key and name to reflect your project key and project name
+  * If your production environment is named something other than Production, you will need to make this update on lines 58 & 86
+5. Save
+6. Follow the steps listed above under [Run](https://github.com/launchdarkly-labs/ps-reference-implementation#run)
