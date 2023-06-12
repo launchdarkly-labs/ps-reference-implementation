@@ -17,7 +17,7 @@ Once you have your access token in hand, there are several ways to set variables
 
 ```
 provider "launchdarkly" {
-  version = "~>1.0"
+  version = "~>2.0"
 }
 ```
 If you would prefer to define your variables some other way, see [Terraform's documentation on input variables](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-variables) for some other ways to do so.
