@@ -23,7 +23,14 @@ resource launchdarkly_custom_role "view-project" {
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}"]
-    actions   = ["viewProject", "createApprovalRequest"]
+    actions   = ["viewProject"]
+  }
+  
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}:env/*:flag/*"]
+    actions   = ["createApprovalRequest"]
+
   }
 }
 
