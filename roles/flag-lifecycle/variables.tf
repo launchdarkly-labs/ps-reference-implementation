@@ -12,6 +12,12 @@ variable "role_key" {
     default = null
 }
 
+variable "with_seperate_context_manager" {
+    type = bool
+    description = "Whether to generate a role for context manager. If false, flag manager will have createContextKind, deleteContextKind, and updateContextKind permissions"
+    default = true
+}
+
 variable "environments" {
     type = map(object({
         name = string
