@@ -4,3 +4,4 @@
 .terraform/*
 terraform.tfvars
 custom.tf
+.DS_Store
