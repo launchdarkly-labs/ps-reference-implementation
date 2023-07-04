@@ -2,9 +2,7 @@ output "project-roles"{
     description = "Project-level flag lifecycle management roles"
     value = {
         "view-project" = launchdarkly_custom_role.view-project,
-        "sdk-key" = launchdarkly_custom_role.sdk-key,
         "flag-manager" = launchdarkly_custom_role.flag-manager,
-        "release-manager" = launchdarkly_custom_role.release-manager,
         "flag-archiver" = launchdarkly_custom_role.flag-archiver,
         "variation-manager" = launchdarkly_custom_role.variation-manager,
         "sdk-manager" = launchdarkly_custom_role.sdk-manager
