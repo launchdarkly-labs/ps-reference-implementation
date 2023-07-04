@@ -30,6 +30,10 @@ module "default-project-roles" {
     key  = "default"
     name = "Default project"
   }
+  // allows flag managers to update flag variations, only enable if at least env enforces approvals
+  with_seperate_variation_manager = false 
+  // enable/disable createApprovalRequest in view role, defaults to true
+  // viewers_can_request_changes = false
   environments = {
     "test" = {
       key = "test"
@@ -53,6 +57,7 @@ module "sandbox-prefix-project-roles" {
   // we need to set it since `sandbox-*` is not a valid role key
   // example roles: flag-manager-sandbox, archiver-sandbox, etc
   role_key = "sandbox"
+  with_seperate_variation_manager = false 
   environments = {
     "test" = {
       key = "test"
@@ -72,7 +77,7 @@ module "preproduction-production-roles" {
     key  = "default"
     name = "Default project"
   }
-
+  with_seperate_variation_manager = false 
   environments = {
     // the map key is used to generate role keys
     // for example: flag-maintainer-default-preproduction

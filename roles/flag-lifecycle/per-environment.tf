@@ -43,6 +43,9 @@ resource "launchdarkly_custom_role" "release-manager" {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/${each.value.specifier}:flag/*"]
     actions = [
+      // explictly include `createApprovalRequest` so this role
+      // works well even when viewers_can_request_changes is false
+      "createApprovalRequest",
       "copyFlagConfigFrom",
       "copyFlagConfigTo",
       "createApprovalRequest",
@@ -131,7 +134,7 @@ resource "launchdarkly_custom_role" "apply-changes" {
   for_each         = local.environments
   key              = "applier-${local.project.key}-${each.key}"
   name             = "Applier - ${local.project.name} - ${each.value.name}"
-  description      = "Can apply approved changes in production"
+  description      = "Can apply approved changes in ${each.value.name}"
   base_permissions = "no_access"
 
   policy_statements {

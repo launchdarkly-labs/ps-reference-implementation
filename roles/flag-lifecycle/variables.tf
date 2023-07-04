@@ -34,6 +34,18 @@ variable "environments" {
   }
 }
 
+variable "with_variation_manager" {
+    type = bool
+    description = "Whether to generate a role for variation manager. If false, flag manager will have updateFlagVariations permission"
+    default = false
+}
+
+variable "viewers_can_request_changes" {
+    type = bool
+    description = "When true, `createApprovalRequest` will be included in the view project role"
+    default = true
+}
+
 variable "environment_excludes" {
     type = map(list(string))
     description = "Map of environment keys to a list of environments to generate deny statements for when creating environment-levle roles"

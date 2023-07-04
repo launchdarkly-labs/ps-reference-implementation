@@ -1,15 +1,18 @@
 output "project-roles"{
     description = "Project-level flag lifecycle management roles"
-    value = {
+    value = merge(
+    {
         "view-project" = launchdarkly_custom_role.view-project,
         "sdk-key" = launchdarkly_custom_role.sdk-key,
         "flag-manager" = launchdarkly_custom_role.flag-manager,
         "release-manager" = launchdarkly_custom_role.release-manager,
         "flag-archiver" = launchdarkly_custom_role.flag-archiver,
-        "variation-manager" = launchdarkly_custom_role.variation-manager,
-        "sdk-manager" = launchdarkly_custom_role.sdk-manager
-
-    }
+        "sdk-manager" = launchdarkly_custom_role.sdk-manager,
+        "approver" = launchdarkly_custom_role.approver-all
+        "apply-changes" = launchdarkly_custom_role.apply-changes-all
+    }, var.with_seperate_variation_manager ? {
+        "variation-manager" = launchdarkly_custom_role.variation-manager[0]
+    } : {})
 }
 
 /// Read only access to a subset of projects
@@ -23,14 +26,7 @@ resource launchdarkly_custom_role "view-project" {
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}"]
-    actions   = ["viewProject"]
-  }
-  
-  policy_statements {
-    effect    = "allow"
-    resources = ["proj/${local.project.specifier}:env/*:flag/*"]
-    actions   = ["createApprovalRequest"]
-
+    actions   = concat(["viewProject"], var.viewers_can_request_changes ? ["createApprovalRequest"] : [])
   }
 }
 
@@ -43,7 +39,27 @@ resource launchdarkly_custom_role "flag-manager" {
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/*:flag/*"]
-    actions   = ["cloneFlag", "createFlag", "createFlagLink", "deleteFlagLink", "updateDescription", "updateFlagCustomProperties", "updateFlagDefaultVariations", "updateFlagLink", "updateMaintainer", "updateName", "updateTags", "updateTemporary"]
+    actions   = concat([
+      /* 
+       *  Always include createApprovalRequest to prevent
+       *  unintended consequences if you remove it from view project
+       */
+        "createApprovalRequest",
+        "cloneFlag",
+        "createFlag",
+        "createFlagLink",
+        "deleteFlagLink",
+        "updateDescription",
+        "updateFlagCustomProperties",
+        "updateFlagDefaultVariations",
+        "updateFlagLink",
+        "updateMaintainer",
+        "updateName",
+        "updateTags",
+        "updateTemporary"
+      ], var.with_seperate_variation_manager ? [
+        "updateFlagVariations"
+      ] : [])
 
   }
 }
@@ -62,6 +78,7 @@ resource launchdarkly_custom_role "flag-archiver" {
 }
 
 resource launchdarkly_custom_role "variation-manager" {
+  count = var.with_seperate_variation_manager ? 1 : 0
   key              = "varmgr-${local.project.key}"
   name             = "Variation Manager - ${local.project.name}"
   description      = "Impacts evaluation of existing flags in all environments"
@@ -73,6 +90,8 @@ resource launchdarkly_custom_role "variation-manager" {
     actions   = ["updateFlagVariations"]
   }
 }
+
+
 
 resource launchdarkly_custom_role "sdk-manager" {
   key              = "sdk-mgr-${local.project.key}"
@@ -89,3 +108,28 @@ resource launchdarkly_custom_role "sdk-manager" {
 }
 
 
+resource launchdarkly_custom_role "approver-all" {
+  key              = "approver-${local.project.key}"
+  name             = "Approver - ${local.project.name}"
+  description      = "Can review, update, and delete approval requests in all environments. Can not apply approval requests."
+  base_permissions = "no_access"
+
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}:env/*:flag/*"]
+    actions   = ["updateApprovalRequest"]
+  }
+}
+
+resource launchdarkly_custom_role "apply-changes-all" {
+  key              = "applier-all-${local.project.key}"
+  name             = "Applier - ${local.project.name}"
+  description      = "Can apply approved changes in all environments"
+  base_permissions = "no_access"
+
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}:env/*:flag/*"]
+    actions   = ["applyApprovalRequest"]
+  }
+}
