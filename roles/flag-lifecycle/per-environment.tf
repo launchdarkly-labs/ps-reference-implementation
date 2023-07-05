@@ -77,7 +77,7 @@ resource "launchdarkly_custom_role" "approver" {
 
   policy_statements {
     effect    = "allow"
-    resources = ["proj/${each.key}:env/*:flag/*"]
+    resources = ["proj/${local.project.specifier}:env/${each.value.specifier}:flag/*"]
     actions   = ["deleteApprovalRequest", "reviewApprovalRequest", "updateApprovalRequest"]
 
   }
@@ -95,7 +95,7 @@ resource "launchdarkly_custom_role" "approver" {
 resource "launchdarkly_custom_role" "segment-manager" {
   for_each         = local.environments
   key              = "segmgr-${local.project.key}-${each.key}"
-  name             = " Segment Manager - ${local.project.name} - ${each.value.name}"
+  name             = "Segment Manager - ${local.project.name} - ${each.value.name}"
   description      = "Can create/modify/delete segments in a single environment"
   base_permissions = "no_access"
 

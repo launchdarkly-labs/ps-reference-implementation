@@ -8,7 +8,6 @@ output "project-roles"{
         "flag-archiver" = launchdarkly_custom_role.flag-archiver,
         "variation-manager" = launchdarkly_custom_role.variation-manager,
         "sdk-manager" = launchdarkly_custom_role.sdk-manager
-
     }
 }
 
