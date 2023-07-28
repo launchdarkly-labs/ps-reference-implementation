@@ -4,9 +4,7 @@ output "project-roles"{
     value = merge(
     {
         "view-project" = launchdarkly_custom_role.view-project,
-        "sdk-key" = launchdarkly_custom_role.sdk-key,
         "flag-manager" = launchdarkly_custom_role.flag-manager,
-        "release-manager" = launchdarkly_custom_role.release-manager,
         "flag-archiver" = launchdarkly_custom_role.flag-archiver,
         "sdk-manager" = launchdarkly_custom_role.sdk-manager,
         "approver" = launchdarkly_custom_role.approver-all

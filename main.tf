@@ -71,6 +71,7 @@ module "sandbox-prefix-project-roles" {
 }
 
 /* Example: Create roles for preproduction/production using wildcards and denies */
+/*
 module "preproduction-production-roles" {
   source = "./roles/flag-lifecycle"
   project = {
@@ -95,5 +96,23 @@ module "preproduction-production-roles" {
   environment_excludes = {
     "preproduction" = [ "production" ]
   }
+}*/
+
+/* 
+ * Create teams for a project
+ * Edit the per-project team definitions in teams/per-project/teams.tf
+ */
+/*
+module default-project-teams {
+  source = "./teams/per-project"
+  project = {
+    key  = "default"
+    name = "Default project"
+  }
+  role-definitions = module.default-project-roles
 }
 
+module project-example {
+  source = "./projects/simple"
+}
+*/
