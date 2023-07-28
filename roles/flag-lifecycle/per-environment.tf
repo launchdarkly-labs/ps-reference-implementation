@@ -43,6 +43,9 @@ resource "launchdarkly_custom_role" "release-manager" {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/${each.value.specifier}:flag/*"]
     actions = [
+      // explictly include `createApprovalRequest` so this role
+      // works well even when viewers_can_request_changes is false
+      "createApprovalRequest",
       "copyFlagConfigFrom",
       "copyFlagConfigTo",
       "createApprovalRequest",
