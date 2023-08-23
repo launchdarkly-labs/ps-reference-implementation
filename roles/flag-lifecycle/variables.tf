@@ -11,8 +11,12 @@ variable "role_key" {
     description = "Value appended to generated role keys. If null, project.key will be used"
     default = null
 }
-
-variable "with_seperate_context_manager" {
+variable "with_separate_variation_manager" {
+    type = bool
+    description = "Whether to generate a role for  variation manager. If false, flag manager will have updateFlagVariations permission"
+    default = false
+}
+variable "with_separate_context_manager" {
     type = bool
     description = "Whether to generate a role for context manager. If false, flag manager will have createContextKind, deleteContextKind, and updateContextKind permissions"
     default = true
@@ -40,11 +44,7 @@ variable "environments" {
   }
 }
 
-variable "with_variation_manager" {
-    type = bool
-    description = "Whether to generate a role for variation manager. If false, flag manager will have updateFlagVariations permission"
-    default = false
-}
+
 
 variable "viewers_can_request_changes" {
     type = bool
