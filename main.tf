@@ -30,7 +30,7 @@ module "default-project-roles" {
     key  = "default"
     name = "Default project"
   }
-  // allows flag managers to update flag variations, only enable if at least env enforces approvals
+  // allows flag managers to update flag variations, only enable if at least one env enforces approvals
   with_seperate_variation_manager = false 
   // enable/disable createApprovalRequest in view role, defaults to true
   // viewers_can_request_changes = false
