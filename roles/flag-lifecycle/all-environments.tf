@@ -9,7 +9,7 @@ output "project-roles"{
         "sdk-manager" = launchdarkly_custom_role.sdk-manager,
         "approver" = launchdarkly_custom_role.approver-all
         "apply-changes" = launchdarkly_custom_role.apply-changes-all
-    }, var.with_seperate_variation_manager ? {
+    }, var.with_separate_variation_manager ? {
         "variation-manager" = launchdarkly_custom_role.variation-manager[0]
     } : {})
 }
@@ -56,12 +56,12 @@ resource "launchdarkly_custom_role" "flag-manager" {
         "updateName",
         "updateTags",
         "updateTemporary"
-      ], var.with_seperate_variation_manager ? [
+      ], var.with_separate_variation_manager == false ? [
         "updateFlagVariations"
       ] : [])
-
+  }
   dynamic "policy_statements" {
-    for_each = var.with_seperate_context_manager == false ? toset([{
+    for_each = var.with_separate_context_manager == false ? toset([{
       effect    = "allow"
       resources = ["proj/${local.project.specifier}:context-kind/*"]
       actions   = ["createContextKind", "updateContextKind", "updateAvailabilityForExperiments"]
@@ -100,7 +100,7 @@ resource "launchdarkly_custom_role" "flag-archiver" {
 }
 
 resource launchdarkly_custom_role "variation-manager" {
-  count = var.with_seperate_variation_manager ? 1 : 0
+  count = var.with_separate_variation_manager ? 1 : 0
   key              = "varmgr-${local.project.key}"
   name             = "Variation Manager - ${local.project.name}"
   description      = "Impacts evaluation of existing flags in all environments"

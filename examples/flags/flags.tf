@@ -82,7 +82,7 @@ resource launchdarkly_feature_flag "release_live_metrics_api" {
     name        = "Release: Live Metrics API"
     key         = "release-live-metrics-api"
     project_key = var.project.key
-    description = "Release the live metrics API. Pretend this is in a seperate project "
+    description = "Release the live metrics API. Pretend this is in a separate project "
     tags        = ["data-aggregator","demo", "example", "dashboard-v2"]
     temporary        = true
     variations {
