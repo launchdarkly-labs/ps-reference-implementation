@@ -113,7 +113,6 @@ resource launchdarkly_custom_role "variation-manager" {
   }
 }
 
-
 resource launchdarkly_custom_role "sdk-manager" {
   key              = "sdk-mgr-${local.project.key}"
   name             = "SDK Manager - ${local.project.name}"
@@ -124,10 +123,8 @@ resource launchdarkly_custom_role "sdk-manager" {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/*:flag/*"]
     actions   = ["updateClientSideFlagAvailability"]
-
   }
 }
-
 
 resource launchdarkly_custom_role "approver-all" {
   key              = "approver-${local.project.key}"

@@ -25,6 +25,4 @@ variable "role-definitions" {
             })
         ))
     })
-    
 }
-

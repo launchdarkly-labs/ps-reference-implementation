@@ -1,5 +1,5 @@
 // gitignore terraform
-*.tfstate
+*.tfstate*
 *.tfstate.backup
 .terraform/*
 terraform.tfvars

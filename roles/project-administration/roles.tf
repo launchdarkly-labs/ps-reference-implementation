@@ -20,14 +20,12 @@ resource launchdarkly_custom_role "workspace-admin" {
 
   }
 
-
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.key}:env/*"]
     actions   = ["createEnvironment", "deleteEnvironment", "updateApiKey", "updateApprovalSettings", "updateColor", "updateConfirmChanges", "updateDefaultTrackEvents", "updateMobileKey", "updateName", "updateRequireComments", "updateSecureMode", "updateTags", "updateTtl"]
 
   }
-
 
   policy_statements {
     effect    = "allow"
@@ -36,14 +34,12 @@ resource launchdarkly_custom_role "workspace-admin" {
 
   }
 
-
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.key}:env/*:user/*"]
     actions   = ["deleteUser"]
 
   }
-
 
   policy_statements {
     effect    = "allow"
@@ -52,9 +48,7 @@ resource launchdarkly_custom_role "workspace-admin" {
 
   }
 
-
 }
-
 
 resource launchdarkly_custom_role "workspace-maintainer" {
   key              = "maintainer-${local.project.key}"
@@ -69,7 +63,6 @@ resource launchdarkly_custom_role "workspace-maintainer" {
 
   }
 
-
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.key}:env/*"]
@@ -77,14 +70,12 @@ resource launchdarkly_custom_role "workspace-maintainer" {
 
   }
 
-
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.key}:env/*:user/*"]
     actions   = ["deleteUser"]
 
   }
-
 
   policy_statements {
     effect    = "allow"

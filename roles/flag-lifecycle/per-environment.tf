@@ -11,6 +11,7 @@ output "environment-roles" {
     }
   }
 }
+
 resource "launchdarkly_custom_role" "sdk-key" {
   for_each         = local.environments
   key              = "sdk-${local.project.key}-${each.key}"
@@ -49,7 +50,6 @@ resource "launchdarkly_custom_role" "release-manager" {
       "copyFlagConfigFrom",
       "copyFlagConfigTo",
       "createApprovalRequest",
-      "updateExpiringRules",
       "updateExpiringTargets",
       "updateFallthrough",
       "updateFeatureWorkflows",
@@ -110,7 +110,6 @@ resource "launchdarkly_custom_role" "segment-manager" {
       "deleteSegment",
       "updateDescription",
       "updateExcluded",
-      "updateExpiringRules",
       "updateExpiringTargets",
       "updateIncluded",
       "updateName",
@@ -152,8 +151,6 @@ resource "launchdarkly_custom_role" "apply-changes" {
   }
 }
 
-
-
 resource "launchdarkly_custom_role" "trigger-manager" {
   for_each         = local.environments
   key              = "trigger-mgr-${local.project.key}-${each.key}"
@@ -175,8 +172,3 @@ resource "launchdarkly_custom_role" "trigger-manager" {
     }
   }
 }
-
-
-
-
-

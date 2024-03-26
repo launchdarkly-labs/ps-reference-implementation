@@ -3,12 +3,8 @@ terraform {
     launchdarkly = {
       source  = "launchdarkly/launchdarkly"
       version = "~> 2.0"
-
     }
   }
-
-
-
 }
 
 # Configure the LaunchDarkly provider
@@ -22,61 +18,60 @@ variable "launchdarkly_access_token" {
   description = "LaunchDarkly access token"
 }
 
-
 /* Example: Create per-project roles using the project-roles module */
-module "default-project-roles" {
-  source = "./roles/flag-lifecycle"
-  project = {
-    key  = "default"
-    name = "Default project"
-  }
-  // allows flag managers to update flag variations, only enable if at least one env enforces approvals
-  // with_separate_variation_manager = true 
-  // enable/disable createApprovalRequest in view role, defaults to true
-  // viewers_can_request_changes = false
-  environments = {
-    "test" = {
-      key = "test"
-      name = "Test"
-    },
-    "production" = {
-      key = "production"
-      name = "Production"
-    }
-  }
-}
+# module "default-project-roles" {
+#   source = "./roles/flag-lifecycle"
+#   project = {
+#     key  = "default"
+#     name = "Default project"
+#   }
+#   // allows flag managers to update flag variations, only enable if at least one env enforces approvals
+#   // with_separate_variation_manager = true 
+#   // enable/disable createApprovalRequest in view role, defaults to true
+#   // viewers_can_request_changes = false
+#   environments = {
+#     "test" = {
+#       key = "test"
+#       name = "Test"
+#     },
+#     "production" = {
+#       key = "production"
+#       name = "Production"
+#     }
+#   }
+# }
 
 /* Example: Create roles for projects matching a prefix */
-module "sandbox-prefix-project-roles" {
-  source = "./roles/flag-lifecycle"
-  project = {
-    key  = "sandbox-*"
-    name = "Sandbox projects"
-  }
-  // `role_key` is appended to generated role keys
-  // we need to set it since `sandbox-*` is not a valid role key
-  // example roles: flag-manager-sandbox, archiver-sandbox, etc
-  role_key = "sandbox"
-  with_separate_variation_manager = false 
-  environments = {
-    "test" = {
-      key = "test"
-      name = "Test"
-    },
-    "production" = {
-      key = "production"
-      name = "Production"
-    }
-  }
-}
+# module "sandbox-prefix-project-roles" {
+#   source = "./roles/flag-lifecycle"
+#   project = {
+#     key  = "sandbox-*"
+#     name = "Sandbox projects"
+#   }
+#   // `role_key` is appended to generated role keys
+#   // we need to set it since `sandbox-*` is not a valid role key
+#   // example roles: flag-manager-sandbox, archiver-sandbox, etc
+#   role_key = "sandbox"
+#   with_separate_variation_manager = false 
+#   environments = {
+#     "test" = {
+#       key = "test"
+#       name = "Test"
+#     },
+#     "production" = {
+#       key = "production"
+#       name = "Production"
+#     }
+#   }
+# }
 
 /* Example: Create roles for preproduction/production using wildcards and denies */
-/*
+
 module "preproduction-production-roles" {
   source = "./roles/flag-lifecycle"
   project = {
-    key  = "default"
-    name = "Default project"
+    key  = "pandora-test-project"
+    name = "Pandora Test Project"
   }
   with_separate_variation_manager = false 
   environments = {
@@ -84,19 +79,19 @@ module "preproduction-production-roles" {
     // for example: flag-maintainer-default-preproduction
     "preproduction" = {
       // the key defines the specifier
-      key = "*"
+      key = "*;{critical:false}"
       name = "Preproduction"
     },
     "production" = {
-      key = "production"
+      key = "*;{critical:true}"
       name = "Production"
     }
   }
-  // map of environments keys (as defined above) to environment kets 
-  environment_excludes = {
-    "preproduction" = [ "production" ]
-  }
-}*/
+  // map of environments keys (as defined above) to environment keys 
+  # environment_excludes = {
+  #   "preproduction" = [ "production" ]
+  # }
+}
 
 /* 
  * Create teams for a project
