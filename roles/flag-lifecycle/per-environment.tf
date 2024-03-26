@@ -107,7 +107,6 @@ resource "launchdarkly_custom_role" "approver" {
   }
 }
 
-
 resource "launchdarkly_custom_role" "segment-manager" {
   for_each         = local.environments
   key              = "segmgr-${local.project.key}-${each.key}"

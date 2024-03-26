@@ -5,7 +5,7 @@ output "project-roles"{
         "view-project" = launchdarkly_custom_role.view-project,
         "flag-manager" = launchdarkly_custom_role.flag-manager,
         "flag-archiver" = launchdarkly_custom_role.flag-archiver,
-        # "sdk-manager" = launchdarkly_custom_role.sdk-manager,
+        "sdk-manager" = launchdarkly_custom_role.sdk-manager,
         # "approver" = launchdarkly_custom_role.approver-all
         # "apply-changes" = launchdarkly_custom_role.apply-changes-all
     }, var.with_separate_variation_manager ? {
