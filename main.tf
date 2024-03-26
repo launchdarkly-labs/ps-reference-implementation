@@ -40,45 +40,27 @@ module "gemini_project_roles" {
       name = "Production"
     }
   }
+  // map of environments keys (as defined above) to environment keys 
+  # environment_excludes = {
+  #   "preproduction" = [ "production" ]
+  # }
 }
 
-module "gemini_project_teams" {
+/* 
+ * Create teams for a project
+ * Edit the per-project team definitions in teams/per-project/teams.tf
+ */
+
+module default-project-teams {
   source = "./teams/per-project"
   role-definitions = module.gemini_roles
   project = {
-    key  = "pandora-test-project"
-    name = "Pandora Test Project"
+    key  = "default"
+    name = "Default project"
   }
+  role-definitions = module.default-project-roles
 }
 
-module "pos_project_teams" {
-  source = "./teams/per-project"
-  role-definitions = module.pos_roles
-  project = {
-    key  = "pos"
-    name = "POS"
-  }
-}
-
-resource launchdarkly_custom_role "platform_admin" {
-  key              = "platform-admin"
-  name             = "Platform Admin"
-  description      = "Platform admins"
-  base_permissions = "reader"
-  policy_statements {
-    effect    = "allow"
-    resources = ["acct"]
-    actions   = ["*"]
-  }
-  policy_statements {
-    effect    = "allow"
-    resources = ["teams/*"]
-    actions   = ["*"]
-  
-  }
-  policy_statements {
-    effect    = "allow"
-    resources = ["custom-roles/*"]
-    actions   = ["*"]
-  }
-}
+# module project-example {
+#   source = "./projects/simple"
+# }
