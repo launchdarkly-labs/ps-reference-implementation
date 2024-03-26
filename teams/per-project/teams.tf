@@ -12,7 +12,7 @@ module developers {
     description = "Developers with access to the ${var.project.name} project"
     project-roles = ["view-project", "flag-manager"]
     environment-roles = {
-      "*;{critical:false}": ["sdk-key", "release-manager", "segment-manager"]
+      "preproduction": ["sdk-key", "release-manager", "segment-manager"]
     }
 }
 
@@ -25,8 +25,8 @@ module architects_and_leads {
     description = "Architects & Leads with access to the ${var.project.name} project"
     project-roles = ["view-project", "flag-manager", "sdk-manager"]
     environment-roles = {
-      "*;{critical:false}": ["sdk-key", "release-manager", "segment-manager", "approver", "apply-changes", "trigger-manager"],
-      "*;{critical:true}": ["sdk-key", "release-manager", "segment-manager", "approver", "apply-changes", "trigger-manager"]
+      "preproduction": ["sdk-key", "release-manager", "segment-manager", "approver", "apply-changes", "trigger-manager"],
+      "production": ["sdk-key", "release-manager", "segment-manager", "approver", "apply-changes", "trigger-manager"]
     }
 }
 
@@ -40,7 +40,7 @@ module qa {
     description = "QA with access to the ${var.project.name} project"
     project-roles = ["view-project"]
     environment-roles = {
-      "*;{critical:false}": ["release-manager", "segment-manager"]
+      "preproduction": ["release-manager", "segment-manager"]
     }
 }
 
@@ -54,7 +54,7 @@ module product_owners {
     description = "Product Owners with access to the ${var.project.name} project"
     project-roles = ["view-project"]
     environment-roles = {
-      "*;{critical:false}": ["release-manager", "segment-manager"],
-      "*;{critical:true}": ["release-manager", "segment-manager"]
+      "preproduction": ["release-manager", "segment-manager"],
+      "production": ["release-manager", "segment-manager"]
     }
 }

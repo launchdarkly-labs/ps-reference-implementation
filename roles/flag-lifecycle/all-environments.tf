@@ -34,7 +34,16 @@ resource "launchdarkly_custom_role" "flag-manager" {
   name             = "Flag Manager - ${local.project.name}"
   description      = "May perform flag management actions that do not impact the evaluation of existing flags."
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/*:flag/*"]
@@ -79,6 +88,11 @@ resource "launchdarkly_custom_role" "context-manager" {
   name             = "Context Manager - ${local.project.name}"
   description      = "May create and update context kinds"
   base_permissions = "no_access"
+    policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:context-kind/*"]
@@ -91,7 +105,11 @@ resource "launchdarkly_custom_role" "flag-archiver" {
   name             = "Archiver - ${local.project.name}"
   description      = "May archive flags but not delete them. This action impacts the evaluation of existing flags in all environments. It can, however, be easily undone."
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/*:flag/*"]
@@ -105,7 +123,11 @@ resource launchdarkly_custom_role "variation-manager" {
   name             = "Variation Manager - ${local.project.name}"
   description      = "Impacts evaluation of existing flags in all environments"
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/*:flag/*"]
@@ -118,7 +140,11 @@ resource launchdarkly_custom_role "sdk-manager" {
   name             = "SDK Manager - ${local.project.name}"
   description      = "Impacts the evaluation of flags in all environments for client-side SDKs"
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/*:flag/*"]

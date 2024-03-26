@@ -18,6 +18,11 @@ resource "launchdarkly_custom_role" "sdk-key" {
   name             = "View SDK Key - ${local.project.name} - ${each.value.name}"
   description      = "Can view the read-only server-side SDK key in a single environment"
   base_permissions = "no_access"
+    policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/${each.value.specifier}"]
@@ -39,7 +44,11 @@ resource "launchdarkly_custom_role" "release-manager" {
   name             = "Release Manager - ${local.project.name} - ${each.value.name}"
   description      = "Allow actions on flags  that impact evaluation of flags in a single environment"
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/${each.value.specifier}:flag/*"]
@@ -77,7 +86,11 @@ resource "launchdarkly_custom_role" "approver" {
   name             = "Approver - ${local.project.name} - ${each.value.name}"
   description      = "Can review, update, and delete approval requests.Can not apply approval requests."
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/${each.value.specifier}:flag/*"]
@@ -101,7 +114,11 @@ resource "launchdarkly_custom_role" "segment-manager" {
   name             = "Segment Manager - ${local.project.name} - ${each.value.name}"
   description      = "Can create/modify/delete segments in a single environment"
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/${each.value.specifier}:segment/*"]
@@ -135,7 +152,11 @@ resource "launchdarkly_custom_role" "apply-changes" {
   name             = "Applier - ${local.project.name} - ${each.value.name}"
   description      = "Can apply approved changes in ${each.value.name}"
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/${each.value.specifier}:flag/*"]
@@ -157,7 +178,11 @@ resource "launchdarkly_custom_role" "trigger-manager" {
   name             = "Trigger Manager - ${local.project.name} - ${each.value.name}"
   description      = "Delegates authority to toggle a flag on/off via unguessable URL endpoint"
   base_permissions = "no_access"
-
+  policy_statements {
+    effect    = "allow"
+    resources = ["proj/${local.project.specifier}"]
+    actions   = ["viewProject"]
+  }
   policy_statements {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/${each.value.specifier}:flag/*"]
