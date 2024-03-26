@@ -7,8 +7,8 @@ output "project-roles"{
         "flag-manager" = launchdarkly_custom_role.flag-manager,
         "flag-archiver" = launchdarkly_custom_role.flag-archiver,
         "sdk-manager" = launchdarkly_custom_role.sdk-manager,
-        "approver" = launchdarkly_custom_role.approver-all
-        "apply-changes" = launchdarkly_custom_role.apply-changes-all
+  //      "approver" = launchdarkly_custom_role.approver-all
+//        "apply-changes" = launchdarkly_custom_role.apply-changes-all
     }, var.with_separate_variation_manager ? {
         "variation-manager" = launchdarkly_custom_role.variation-manager[0]
     } : {})
@@ -123,31 +123,5 @@ resource launchdarkly_custom_role "sdk-manager" {
     effect    = "allow"
     resources = ["proj/${local.project.specifier}:env/*:flag/*"]
     actions   = ["updateClientSideFlagAvailability"]
-  }
-}
-
-resource launchdarkly_custom_role "approver-all" {
-  key              = "approver-${local.project.key}"
-  name             = "Approver - ${local.project.name}"
-  description      = "Can review, update, and delete approval requests in all environments. Can not apply approval requests."
-  base_permissions = "no_access"
-
-  policy_statements {
-    effect    = "allow"
-    resources = ["proj/${local.project.specifier}:env/*:flag/*"]
-    actions   = ["updateApprovalRequest"]
-  }
-}
-
-resource launchdarkly_custom_role "apply-changes-all" {
-  key              = "applier-all-${local.project.key}"
-  name             = "Applier - ${local.project.name}"
-  description      = "Can apply approved changes in all environments"
-  base_permissions = "no_access"
-
-  policy_statements {
-    effect    = "allow"
-    resources = ["proj/${local.project.specifier}:env/*:flag/*"]
-    actions   = ["applyApprovalRequest"]
   }
 }
