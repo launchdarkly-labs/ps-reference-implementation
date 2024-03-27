@@ -5,3 +5,6 @@
 terraform.tfvars
 custom.tf
 .DS_Store
+
+// ignore compressed delivery files
+*.zip
